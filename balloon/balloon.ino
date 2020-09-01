@@ -141,12 +141,9 @@ void loop() {
         }
     }
 
-    // if GPS location is older than 10 seconds, mark it as invalid
+    // if GPS location is older than 10 seconds, mark it as invalid, but keep the last available GPS data
     if (gpsLocation.age() > 10000) {
         locationValid = false;
-        lat = NAN;
-        lng = NAN;
-        alt = NAN;
         DEBUG_PRINTLN(F("No new GPS data"));
     }
 
