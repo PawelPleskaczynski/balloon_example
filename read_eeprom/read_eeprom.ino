@@ -2,6 +2,8 @@
 
 struct Measurement {
     float temperature;
+    float lat;
+    float lng;
     float alt;
 };
 

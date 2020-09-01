@@ -18,6 +18,8 @@
 
 struct Measurement {
     float temperature;
+    float lat;
+    float lng;
     float alt;
 };
 
@@ -105,6 +107,8 @@ void loop() {
     // if acquisition is active and there's space on the EEPROM
     if (acq && !acqDone) {
         m.temperature = (float)analogRead(TEMPERATURE_PIN)/10240.0;
+        m.lat = lat;
+        m.lng = lng;
         m.alt = alt;
         EEPROM.put(address, m);
         DEBUG_PRINT(F("Saved value to the EEPROM at "));
