@@ -32,6 +32,7 @@ const float epsilon =           0.0001; // 0.0001 deg = 11.1 meters
 Measurement m;
 SoftwareSerial gps_serial(GPS_RX_PIN, GPS_TX_PIN);
 SIM800L sim;
+TinyGPSPlus gps;
 
 float lat;
 float lng;
@@ -47,6 +48,7 @@ bool acqDone = false;
 bool landed = false;
 unsigned long lastGPSReading = 0;
 bool locationValid = false;
+TinyGPSLocation gpsLocation;
 
 void waitForSignal() {
     DEBUG_PRINTLN("Performing handshake");
@@ -64,7 +66,7 @@ void waitForSignal() {
     DEBUG_PRINTLN(temp2);
 }
 
-void addNewValue(float latArr*, float lngArr*, float altArr*, float latValue, float lngValue, float altValue) {
+void addNewValue(float* latArr, float* lngArr, float* altArr, float latValue, float lngValue, float altValue) {
     for (int i = 0; i < ARRAY_SIZE - 1; ++i) {
         latArr[i] = latArr[i + 1];
         lngArr[i] = lngArr[i + 1];
@@ -147,7 +149,7 @@ void loop() {
         DEBUG_PRINTLN(F("No new GPS data"));
     }
 
-    // if location is valid, check if the balloon 
+    // if location is valid, check if the balloon has travelled enough distance for a new measurement
     if (locationValid) {
         addNewValue(latArr, lngArr, altArr, lat, lng, alt);
         if (alt - last_measurement_altitude >= measurement_diff && !acqDone) {
@@ -165,9 +167,9 @@ void parseGPS() {
     // if GPS data is valid and it's not too old, parse it...
     if (gps.location.isValid() && gps.location.age() < 10000) {
         locationValid = true;
-        lat = gps.location.lat;
-        lng = gps.location.lng;
-        alt = gps.altitude.meters;
+        lat = gps.location.lat();
+        lng = gps.location.lng();
+        alt = gps.altitude.meters();
         DEBUG_PRINT(lat);
         DEBUG_PRINT(F(" lat; "));
         DEBUG_PRINT(lng);

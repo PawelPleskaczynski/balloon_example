@@ -1,6 +1,7 @@
 #include <SoftwareSerial.h>
 #include "Arduino.h"
 #include "SIM800L.h"
+#include "debug.h"
 
 SoftwareSerial gsm(SIM_TX, SIM_RX);
 
